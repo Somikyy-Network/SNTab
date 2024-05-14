@@ -12,16 +12,11 @@ prefix: "&8[&6SN TAB&8] &7"
 Tab-Config:
   # Tablist header
   tab-header:
-    - "&8&m------------------------"
-    - "&6&lSN TAB"
-    - "&7&lby Somikyy"
-    - "&8&m------------------------"
+    - "&6Welcome, %player_name%!"
 
   # Tablist footer
   tab-footer:
-    - "&8&m------------------------"
-    - "&6&lOnline players: &7%online%"
-    - "&8&m------------------------"
+    - "&6Thanks for playing, %player_name%!"
 
   # Tablist slots
   slots:
