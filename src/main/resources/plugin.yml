@@ -1,0 +1,7 @@
+name: SNTab
+version: '${project.version}'
+main: org.sntab.SNTab
+api-version: '1.20'
+prefix: SNTab
+authors: [somikyy]
+description: somikyy's network tab plugin

@@ -1,0 +1,40 @@
+# ----------------------------------------
+#       SN TAB / V1.0 / by Somikyy
+#           twitch.tv/som1kyy
+# ----------------------------------------
+
+# Config version
+config-version: 1.0
+
+# Plugin prefix
+prefix: "&8[&6SN TAB&8] &7"
+
+Tab-Config:
+  # Tablist header
+  tab-header:
+    - "&8&m------------------------"
+    - "&6&lSN TAB"
+    - "&7&lby Somikyy"
+    - "&8&m------------------------"
+
+  # Tablist footer
+  tab-footer:
+    - "&8&m------------------------"
+    - "&6&lOnline players: &7%online%"
+    - "&8&m------------------------"
+
+  # Tablist slots
+  slots:
+    - "&6&l%player%"
+    - "&7&lRank: &6%rank%"
+    - "&7&lBalance: &6%balance%$"
+    - "&7&lPlaytime: &6%playtime%"
+
+  # Tablist refresh rate
+  refresh-rate: 20
+
+  # Tablist update rate
+  update-rate: 1
+
+  # Tablist update delay
+  update-delay: 1
