@@ -60,8 +60,8 @@
           <url>https://oss.sonatype.org/content/groups/public/</url>
       </repository>
       <repository>
-            <id>placeholderapi-repo</id>
-            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+          <id>placeholderapi</id>
+          <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
       </repository>
   </repositories>
 
@@ -69,8 +69,8 @@
       <dependency>
           <groupId>me.clip</groupId>
           <artifactId>placeholderapi</artifactId>
-          <version>2.10.9</version>
-            <scope>provided</scope>
+          <version>2.11.5</version>
+          <scope>provided</scope>
       </dependency>
       <dependency>
           <groupId>io.papermc.paper</groupId>

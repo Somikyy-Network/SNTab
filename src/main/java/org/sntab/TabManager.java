@@ -4,6 +4,7 @@ import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,10 +24,6 @@ public class TabManager {
         List<String> header = config.getTabHeader();
         List<String> footer = config.getTabFooter();
 
-        //print the header and footer values for devugging
-        System.out.println("Header: " + header);
-        System.out.println("Footer: " + footer);
-
         // check if the header and footer are empty
         if (header == null || footer == null) {
             plugin.getLogger().warning("Tab header or footer is empty");
@@ -37,10 +34,25 @@ public class TabManager {
         String headerString = String.join("\n", header);
         String footerString = String.join("\n", footer);
 
-        // print the colorized header and footer values for debugging
-        System.out.println("Colorized Header: " + colorize(header));
-        System.out.println("Colorized Footer: " + colorize(footer));
+        // Update the tab list for each online player
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            String parsedHeader = parsePlaceholders(player, headerString);
+            String parsedFooter = parsePlaceholders(player, footerString);
 
+            // Colorize after parsing placeholders
+            List<String> colorizedHeader = colorize(Arrays.asList(parsedHeader.split("\n")));
+            List<String> colorizedFooter = colorize(Arrays.asList(parsedFooter.split("\n")));
+
+            // Convert back to single string
+            String colorizedHeaderString = String.join("\n", colorizedHeader);
+            String colorizedFooterString = String.join("\n", colorizedFooter);
+
+            player.setPlayerListHeaderFooter(colorizedHeaderString, colorizedFooterString);
+        }
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            updatePlayerListName(player);
+        }
         // Get the slots
         List<String> slots = config.getSlots();
 
@@ -59,16 +71,14 @@ public class TabManager {
         // Get the update delay
         int updateDelay = config.getUpdateDelay();
 
-        // Update the tab list for each online player
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            String parsedHeader = parsePlaceholders(player, headerString);
-            String parsedFooter = parsePlaceholders(player, footerString);
-
-            player.setPlayerListHeaderFooter(parsedHeader, parsedFooter);
-        }
-
         // Schedule the next update
         plugin.getServer().getScheduler().runTaskLater(plugin, this::updateTab, refreshRate);
+    }
+
+    private void updatePlayerListName(Player player) {
+        int ping = player.getPing();
+
+        player.setPlayerListName(player.getName() + " " + ping + "ms");
     }
 
     private List<String> colorize(List<String> lines) {
@@ -79,8 +89,13 @@ public class TabManager {
 
     private String parsePlaceholders(Player player, String text) {
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            return PlaceholderAPI.setPlaceholders(player, text);
+            String parsedText = PlaceholderAPI.setPlaceholders(player, text);
+            return parsedText;
         } else {
+            plugin.getLogger().warning("------------------------------------------------------------------"); // Add this line
+            plugin.getLogger().warning("PlaceholderAPI is not enabled/installed"); // Add this line
+            plugin.getLogger().warning("You should install it so SNTab works. (maybe install expansions?)"); // Add this line
+            plugin.getLogger().warning("------------------------------------------------------------------"); // Add this line
             return text;
         }
     }
