@@ -5,3 +5,15 @@ api-version: '1.20'
 prefix: SNTab
 authors: [somikyy]
 description: somikyy's network tab plugin
+
+commands:
+  sntabreload:
+    description: Reloads the plugin
+    usage: /<command>
+    permission: sntab.reload
+    aliases: [sntabrl]
+
+  permissions:
+    sntab.reload:
+      description: Allows the player to reload the plugin
+      default: op

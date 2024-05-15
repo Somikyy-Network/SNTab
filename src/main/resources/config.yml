@@ -18,13 +18,6 @@ Tab-Config:
   tab-footer:
     - "&6Thanks for playing, %player_name%!"
 
-  # Tablist slots
-  slots:
-    - "&6&l%player%"
-    - "&7&lRank: &6%rank%"
-    - "&7&lBalance: &6%balance%$"
-    - "&7&lPlaytime: &6%playtime%"
-
   # Tablist refresh rate
   refresh-rate: 20
 

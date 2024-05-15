@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,11 +49,16 @@ public class TabManager {
             String colorizedFooterString = String.join("\n", colorizedFooter);
 
             player.setPlayerListHeaderFooter(colorizedHeaderString, colorizedFooterString);
+
+            List<String> slots = config.getSlots();
+
+            // Parse the placeholders in each slot and set the parsed text as the player's tab list name
+            for (String slot : slots) {
+                String parsedSlot = parsePlaceholders(player, slot);
+                player.setPlayerListName(parsedSlot);
+            }
         }
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            updatePlayerListName(player);
-        }
         // Get the slots
         List<String> slots = config.getSlots();
 
@@ -71,14 +77,29 @@ public class TabManager {
         // Get the update delay
         int updateDelay = config.getUpdateDelay();
 
+        Collection<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers();
+
+        for (Player player : onlinePlayers) {
+            updatePlayerListName(player);
+        }
+
         // Schedule the next update
         plugin.getServer().getScheduler().runTaskLater(plugin, this::updateTab, refreshRate);
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            updatePlayerListName(player);
+        }
     }
 
     private void updatePlayerListName(Player player) {
+        String prefix = parsePlaceholders(player, "%vault_prefix%");
+        String suffix = parsePlaceholders(player, "%vault_suffix%");
+        prefix = prefix.replace("&", "§");
+        suffix = suffix.replace("&", "§");
         int ping = player.getPing();
+        String pingColor = getPingColor(ping);
 
-        player.setPlayerListName(player.getName() + " " + ping + "ms");
+        player.setPlayerListName(prefix + player.getName() + " " + suffix + " " + pingColor + ping + "ms");
     }
 
     private List<String> colorize(List<String> lines) {
@@ -92,11 +113,27 @@ public class TabManager {
             String parsedText = PlaceholderAPI.setPlaceholders(player, text);
             return parsedText;
         } else {
-            plugin.getLogger().warning("------------------------------------------------------------------"); // Add this line
-            plugin.getLogger().warning("PlaceholderAPI is not enabled/installed"); // Add this line
-            plugin.getLogger().warning("You should install it so SNTab works. (maybe install expansions?)"); // Add this line
-            plugin.getLogger().warning("------------------------------------------------------------------"); // Add this line
+            plugin.getLogger().warning("------------------------------------------------------------------");
+            plugin.getLogger().warning("PlaceholderAPI is not enabled/installed");
+            plugin.getLogger().warning("You should install it so SNTab works. (maybe install expansions?)");
+            plugin.getLogger().warning("------------------------------------------------------------------");
             return text;
+        }
+    }
+
+    private String getPingColor(int ping) {
+        if (ping < 40) {
+            return "§a"; // Green
+        } else if (ping < 90) {
+            return "§a"; // Lime
+        } else if (ping < 130) {
+            return "§e"; // Yellow
+        } else if (ping < 175) {
+            return "§6"; // Orange
+        } else if (ping < 200) {
+            return "§c"; // Red
+        } else {
+            return "§0"; // Black
         }
     }
 }
